@@ -13,7 +13,7 @@ describe('My test suite', () => {
             expect(data.Hello).to.be.eq('World')
         })
     })
-    it.only("My second test case.", () => {
+    it("My second test case.", () => {
         cy.request({
             method: 'GET',
             url: 'http://127.0.0.1:8000/name'
@@ -23,6 +23,18 @@ describe('My test suite', () => {
             expect(data).to.have.property('name')
             expect(data.name).to.be.eq('Iden')
             expect(data.name).to.be.an('string')
+        })
+    })
+    it.only("My test written on ubuntu.", () => {
+        cy.request({
+            method: 'GET',
+            url: 'http://127.0.0.1:8000/ubuntu'
+        }).then(response => {
+            const data = response.body
+            expect(data).to.be.an('object')
+            expect(data).to.have.property('os')
+            expect(data.os).to.be.an('string')
+            expect(data.os).to.be.eq('ubuntu')
         })
     })
 })
