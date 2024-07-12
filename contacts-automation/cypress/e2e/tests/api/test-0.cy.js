@@ -51,7 +51,7 @@ describe('My test suite', () => {
             expect(data.os).to.be.eq('windows')
         })
     })
-    it.only("Test for the users route.", () => {
+    it("Test for the users route.", () => {
     	cy.request({
 	        method: 'GET',
 	        url: 'http:/127.0.0.1:8000/users'
@@ -61,5 +61,14 @@ describe('My test suite', () => {
             expect(data.users[0].name).to.be.eq('juan')
             expect(data.users[1].name).to.be.eq('brayan')
 	    })
+    })
+    it.only("Test for the update users route.", () => {
+        cy.request({
+            method: 'PUT',
+            url: 'http:/127.0.0.1:8000/users/1'
+        }).then(response => {
+            console.log(response)
+            expect(response.body.msg).to.be.eq('user with the id: 1 was updated successfully')
+        })
     })
 })
