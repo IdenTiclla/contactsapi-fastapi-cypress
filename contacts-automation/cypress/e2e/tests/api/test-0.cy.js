@@ -62,13 +62,26 @@ describe('My test suite', () => {
             expect(data.users[1].name).to.be.eq('brayan')
 	    })
     })
-    it.only("Test for the update users route.", () => {
+    it("Test for the update users route.", () => {
         cy.request({
             method: 'PUT',
             url: 'http:/127.0.0.1:8000/users/1'
         }).then(response => {
             console.log(response)
             expect(response.body.msg).to.be.eq('user with the id: 1 was updated successfully')
+        })
+    })
+
+    it.only("Test for requesting the update users route but with not valid parameters.", () => {
+        cy.request({
+            method: 'PUT',
+            url: 'http:/127.0.0.1:8000/users/asdf',
+            failOnStatusCode: false
+        }).then(response => {
+            console.log(response)
+            const data = response.body
+            console.log(data.detail[0].msg)
+            expect(data.detail[0].msg).to.be.eq('Input should be a valid integer, unable to parse string as an integer')
         })
     })
 })
