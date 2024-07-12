@@ -25,11 +25,12 @@ describe('My test suite', () => {
             expect(data.name).to.be.an('string')
         })
     })
-    it("My test written on ubuntu.", () => {
+    it.only("My test written on ubuntu.", () => {
         cy.request({
             method: 'GET',
             url: 'http://127.0.0.1:8000/ubuntu'
         }).then(response => {
+            expect(response.status).to.be.eq(200)
             const data = response.body
             expect(data).to.be.an('object')
             expect(data).to.have.property('os')
@@ -38,7 +39,7 @@ describe('My test suite', () => {
         })
     })
 
-    it.only("My test written on windows", () => {
+    it("My test written on windows", () => {
         cy.request({
             method: 'GET',
             url: 'http://127.0.0.1:8000/windows'
