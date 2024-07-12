@@ -1,8 +1,13 @@
-from typing import Union
-
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 app = FastAPI()
+
+class Contact(BaseModel):
+    name: str
+    last_name: str
+    age: int
+    phone_number: int
 
 
 @app.get("/")
@@ -21,6 +26,6 @@ def ubuntu_road():
 def windows_road():
     return {"os": "windows"}
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+@app.get('/users')
+def read_users():
+    return {"users": [{"name": "juan"}, {"name": "brayan"}]}
