@@ -72,7 +72,7 @@ describe('My test suite', () => {
         })
     })
 
-    it.only("Test for requesting the update users route but with not valid parameters.", () => {
+    it("Test for requesting the update users route but with not valid parameters.", () => {
         cy.request({
             method: 'PUT',
             url: 'http:/127.0.0.1:8000/users/asdf',
@@ -83,7 +83,7 @@ describe('My test suite', () => {
             expect(data.detail[0].msg).to.be.eq('Input should be a valid integer, unable to parse string as an integer')
         })
     })
-    it.only("Test for requesting the delete users route.", () => {
+    it("Test for requesting the delete users route.", () => {
         cy.request({
             method: 'DELETE',
             url: 'http:/127.0.0.1:8000/users/1'
@@ -93,7 +93,7 @@ describe('My test suite', () => {
             expect(response.body.msg).to.be.eq('user with the id: 1 was deleted successfully')
         })
     })
-    it.only("Bad request for the delete users route.", () => {
+    it("Bad request for the delete users route.", () => {
         cy.request({
             method: 'DELETE',
             url: 'http:/127.0.0.1:8000/users/asdfd',
@@ -103,6 +103,27 @@ describe('My test suite', () => {
             expect(response.status).to.be.eq(422)
             expect(response.body.detail[0].msg).to.be.eq("Input should be a valid integer, unable to parse string as an integer")
             expect(response.body.detail[0].type).to.be.eq("int_parsing")
+        })
+    })
+    it.only("Test for requesting the post contact route.", () => {
+        cy.request({
+            method: 'POST',
+            url: 'http:/127.0.0.1:8000/contacts',
+            body: {
+                name: 'Iden',
+                last_name: 'Ticlla',
+                age: 25,
+                phone_number: 77478489
+            }
+        }).then(response => {
+            console.log(response)
+            expect(response.status).to.be.eq(200)
+            const data = response.body
+            expect(data.msg).to.be.eq("user created successfully.")
+            expect(data.contact.name).to.be.eq('Iden')
+            expect(data.contact.last_name).to.be.eq('Ticlla') 
+            expect(data.contact.age).to.be.eq(25) 
+            expect(data.contact.phone_number).to.be.eq(77478489) 
         })
     })
 })
