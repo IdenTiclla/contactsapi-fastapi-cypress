@@ -29,3 +29,7 @@ def windows_road():
 @app.get('/users')
 def read_users():
     return {"users": [{"name": "juan"}, {"name": "brayan"}]}
+
+@app.put('/users/{id}')
+def update_users(id: int):
+    return {"msg": f"user with the id: {id} was updated successfully"}
