@@ -30,6 +30,11 @@ def windows_road():
 def read_users():
     return {"users": [{"name": "juan"}, {"name": "brayan"}]}
 
+@app.post('/contacts')
+def create_users(contact: Contact):
+    print(contact)
+    return {"msg": "user created successfully.", "contact": contact}
+
 @app.put('/users/{id}')
 def update_users(id: int):
     return {"msg": f"user with the id: {id} was updated successfully"}
