@@ -17,6 +17,9 @@ def custom_read():
 def ubuntu_road():
     return {"os": "ubuntu"}
 
+@app.get("/windows")
+def windows_road():
+    return {"os": "windows"}
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
