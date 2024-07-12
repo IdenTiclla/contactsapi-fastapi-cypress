@@ -93,4 +93,16 @@ describe('My test suite', () => {
             expect(response.body.msg).to.be.eq('user with the id: 1 was deleted successfully')
         })
     })
+    it.only("Bad request for the delete users route.", () => {
+        cy.request({
+            method: 'DELETE',
+            url: 'http:/127.0.0.1:8000/users/asdfd',
+            failOnStatusCode: false
+        }).then(response => {
+            console.log(response)
+            expect(response.status).to.be.eq(422)
+            expect(response.body.detail[0].msg).to.be.eq("Input should be a valid integer, unable to parse string as an integer")
+            expect(response.body.detail[0].type).to.be.eq("int_parsing")
+        })
+    })
 })
