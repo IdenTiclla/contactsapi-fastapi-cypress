@@ -33,3 +33,7 @@ def read_users():
 @app.put('/users/{id}')
 def update_users(id: int):
     return {"msg": f"user with the id: {id} was updated successfully"}
+
+@app.delete('/users/{id}')
+def delete_users(id: int):
+    return {"msg": f"user with the id: {id} was deleted successfully"}
