@@ -1,13 +1,11 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+from routers import contacts
 
 app = FastAPI()
 
-class Contact(BaseModel):
-    name: str
-    last_name: str
-    age: int
-    phone_number: int
+app.include_router(contacts.router)
+
 
 
 @app.get("/")
