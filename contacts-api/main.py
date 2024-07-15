@@ -1,13 +1,11 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+from routers import contacts
 
 app = FastAPI()
 
-class Contact(BaseModel):
-    name: str
-    last_name: str
-    age: int
-    phone_number: int
+app.include_router(contacts.router)
+
 
 
 @app.get("/")
@@ -29,11 +27,6 @@ def windows_road():
 @app.get('/users')
 def read_users():
     return {"users": [{"name": "juan"}, {"name": "brayan"}]}
-
-@app.post('/contacts')
-def create_users(contact: Contact):
-    print(contact)
-    return {"msg": "user created successfully.", "contact": contact}
 
 @app.put('/users/{id}')
 def update_users(id: int):
