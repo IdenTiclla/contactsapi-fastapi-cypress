@@ -131,12 +131,17 @@ describe('My test suite', () => {
             method: 'POST',
             url : 'http:/127.0.0.1:8000/login',
             failOnStatusCode: false,
-            form: true,
+            // form: true,
+            headers: {
+                // 'Content-Type': 'application/x-www-form-urlencode'
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            },
             body: {
                 username: 'asdf',
                 password: 'somepassword'
             }
         }).then(response => {
+            console.log(response)
             expect(response.status).to.be.eq(400)
             const msg = response.body.detail
             expect(msg).to.be.eq("Incorrect username or password.")
