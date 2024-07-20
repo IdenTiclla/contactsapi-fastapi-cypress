@@ -105,7 +105,7 @@ describe('My test suite', () => {
             expect(response.body.detail[0].type).to.be.eq("int_parsing")
         })
     })
-    it.only("Test for requesting the post contact route.", () => {
+    it("Test for requesting the post contact route.", () => {
         cy.request({
             method: 'POST',
             url: 'http:/127.0.0.1:8000/contacts',
@@ -124,6 +124,22 @@ describe('My test suite', () => {
             expect(data.contact.last_name).to.be.eq('Ticlla') 
             expect(data.contact.age).to.be.eq(25) 
             expect(data.contact.phone_number).to.be.eq(77478489) 
+        })
+    })
+    it.only("Testing the login functionality.", () => {
+        cy.request({
+            method: 'POST',
+            url : 'http:/127.0.0.1:8000/login',
+            failOnStatusCode: false,
+            form: true,
+            body: {
+                username: 'asdf',
+                password: 'somepassword'
+            }
+        }).then(response => {
+            expect(response.status).to.be.eq(400)
+            const msg = response.body.detail
+            expect(msg).to.be.eq("Incorrect username or password.")
         })
     })
 })
