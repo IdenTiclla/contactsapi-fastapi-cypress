@@ -5,6 +5,8 @@ from routers import contacts
 
 app = FastAPI()
 
+app.include_router(contacts.router)
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
