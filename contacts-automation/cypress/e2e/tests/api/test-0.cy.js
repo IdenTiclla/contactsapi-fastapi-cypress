@@ -113,7 +113,6 @@ describe('My test suite', () => {
                 phone_number: 77478489
             }
         }).then(response => {
-            console.log(response)
             expect(response.status).to.be.eq(201)
             const data = response.body
             expect(data).to.be.an('object')
@@ -126,7 +125,7 @@ describe('My test suite', () => {
     it("Testing the login functionality - expecting 400 status.", () => {
         cy.request({
             method: 'POST',
-            url : 'http:/127.0.0.1:8000/login',
+            url : 'http://127.0.0.1:8000/login',
             failOnStatusCode: false,
             // form: true,
             headers: {
@@ -146,7 +145,7 @@ describe('My test suite', () => {
     it("Testing the login functionality expecting 200 status", () => {
         cy.request({
             method: 'POST',
-            url: 'http:/127.0.0.1:8000/login',
+            url: 'http://127.0.0.1:8000/login',
             failOnStatusCode: false,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -156,12 +155,38 @@ describe('My test suite', () => {
                 password: 'secret1'
             }
         }).then(response => {
-            console.log(response)
             expect(response.status).to.be.eq(200)
             const data = response.body
             expect(data).to.have.property("access_token")
             expect(data).to.have.property("token_type")
             expect(data.token_type).to.be.eq('bearer')
+        })
+    })
+    it.only("Testing the get me endpoint with inactive user.", () => {
+        cy.request({
+            method: 'POST',
+            url: 'http://127.0.0.1:8000/login',
+            failOnStatusCode: false,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            body: {
+                username: 'alice',
+                password: 'secret1'
+            }
+        }).then(response => {
+            const token = response.body.access_token
+            cy.request({
+                method: 'GET',
+                url: 'http://127.0.0.1:8000/users/me',
+                failOnStatusCode: false,
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(response => {
+                expect(response.status).to.be.eq(400)
+                expect(response.body.detail).to.be.eq('Inactive user')
+            })
         })
     })
 })
