@@ -4,8 +4,6 @@ describe('My test suite', () => {
             method: 'GET',
             url: 'http://127.0.0.1:8000/'
         }).then(response => {
-            console.log(response)
-            console.log(response.body)
             const data = response.body
             expect(data).to.be.an('object')
             expect(data).to.have.property('Hello')
@@ -67,7 +65,6 @@ describe('My test suite', () => {
             method: 'PUT',
             url: 'http:/127.0.0.1:8000/users/1'
         }).then(response => {
-            console.log(response)
             expect(response.body.msg).to.be.eq('user with the id: 1 was updated successfully')
         })
     })
@@ -88,7 +85,6 @@ describe('My test suite', () => {
             method: 'DELETE',
             url: 'http:/127.0.0.1:8000/users/1'
         }).then(response => {
-            console.log(response)
             expect(response.status).to.be.eq(200)
             expect(response.body.msg).to.be.eq('user with the id: 1 was deleted successfully')
         })
@@ -99,7 +95,6 @@ describe('My test suite', () => {
             url: 'http:/127.0.0.1:8000/users/asdfd',
             failOnStatusCode: false
         }).then(response => {
-            console.log(response)
             expect(response.status).to.be.eq(422)
             expect(response.body.detail[0].msg).to.be.eq("Input should be a valid integer, unable to parse string as an integer")
             expect(response.body.detail[0].type).to.be.eq("int_parsing")
@@ -109,7 +104,9 @@ describe('My test suite', () => {
         cy.request({
             method: 'POST',
             url: 'http:/127.0.0.1:8000/contacts',
+            failOnStatusCode: false,
             body: {
+                id: 5,
                 name: 'Iden',
                 last_name: 'Ticlla',
                 age: 25,
@@ -117,16 +114,16 @@ describe('My test suite', () => {
             }
         }).then(response => {
             console.log(response)
-            expect(response.status).to.be.eq(200)
+            expect(response.status).to.be.eq(201)
             const data = response.body
-            expect(data.msg).to.be.eq("user created successfully.")
-            expect(data.contact.name).to.be.eq('Iden')
-            expect(data.contact.last_name).to.be.eq('Ticlla') 
-            expect(data.contact.age).to.be.eq(25) 
-            expect(data.contact.phone_number).to.be.eq(77478489) 
+            expect(data).to.be.an('object')
+            expect(data.name).to.be.eq('Iden')
+            expect(data.last_name).to.be.eq('Ticlla') 
+            expect(data.age).to.be.eq(25) 
+            expect(data.phone_number).to.be.eq(77478489) 
         })
     })
-    it.only("Testing the login functionality.", () => {
+    it("Testing the login functionality - expecting 400 status.", () => {
         cy.request({
             method: 'POST',
             url : 'http:/127.0.0.1:8000/login',
@@ -141,10 +138,30 @@ describe('My test suite', () => {
                 password: 'somepassword'
             }
         }).then(response => {
-            console.log(response)
             expect(response.status).to.be.eq(400)
             const msg = response.body.detail
-            expect(msg).to.be.eq("Incorrect username or password.")
+            expect(msg).to.be.eq("Wrong username or password.")
+        })
+    })
+    it("Testing the login functionality expecting 200 status", () => {
+        cy.request({
+            method: 'POST',
+            url: 'http:/127.0.0.1:8000/login',
+            failOnStatusCode: false,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            body: {
+                username: 'jhondoe',
+                password: 'secret1'
+            }
+        }).then(response => {
+            console.log(response)
+            expect(response.status).to.be.eq(200)
+            const data = response.body
+            expect(data).to.have.property("access_token")
+            expect(data).to.have.property("token_type")
+            expect(data.token_type).to.be.eq('bearer')
         })
     })
 })
