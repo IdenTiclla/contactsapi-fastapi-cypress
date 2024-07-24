@@ -97,13 +97,13 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
     if not user_dict:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail='Wrong username or password'
+            detail='Wrong username or password.'
         )
     user = UserInDB(**user_dict)
     if not user.hashed_password == fake_hash_password(form_data.password):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail='Wrong username or password'
+            detail='Wrong username or password.'
         )
     
 
@@ -113,7 +113,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
     }
     encoded_token = jwt.encode(token_data, SECRET_KEY, algorithm=ALGORITH)
 
-    return {"token_access": encoded_token, "token_type": "bearer"}
+    return {"access_token": encoded_token, "token_type": "bearer"}
 
 @app.get('/users/me')
 def get_me(current_user: User = Depends(get_current_active_user)):
