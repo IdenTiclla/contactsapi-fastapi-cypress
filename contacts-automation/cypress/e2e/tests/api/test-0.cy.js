@@ -162,7 +162,7 @@ describe('My test suite', () => {
             expect(data.token_type).to.be.eq('bearer')
         })
     })
-    it.only("Testing the get me endpoint with inactive user.", () => {
+    it("Testing the get me endpoint with inactive user.", () => {
         cy.request({
             method: 'POST',
             url: 'http://127.0.0.1:8000/login',
@@ -186,6 +186,39 @@ describe('My test suite', () => {
             }).then(response => {
                 expect(response.status).to.be.eq(400)
                 expect(response.body.detail).to.be.eq('Inactive user')
+            })
+        })
+    })
+    it.only("Test for testing the get me endpoint with active user.", () => {
+        cy.request({
+            method: "POST",
+            url: "http://127.0.0.1:8000/login",
+            failOnStatusCode: false,
+            headers: {
+                "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            body: {
+                username: "jhondoe",
+                password: "secret1"
+            }
+        }).then(response => {
+            const token = response.body.access_token
+            console.log(token)
+            cy.request({
+                method: 'GET',
+                url: 'http://127.0.0.1:8000/users/me',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(response => {
+                console.log(response)
+                expect(response.status).to.be.eq(200)
+                expect(response.body).to.be.an('object')
+                expect(response.body.username).to.be.eq('jhondoe')
+                expect(response.body.phone).to.be.eq("77074485")
+                expect(response.body.email).to.be.eq('jhondoe@gmail.com')
+                expect(response.body.age).to.be.eq(19)
+                expect(response.body.disabled).to.be.eq(false)
             })
         })
     })
