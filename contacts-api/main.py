@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from routers import contacts
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
+from passlib.context import CryptContext
 import jwt
 from jwt.exceptions import InvalidTokenError
 
@@ -11,6 +12,7 @@ TOKEN_EXPIRATION_MINUTES = 1
 SECRET_KEY = '9e599617f42ea3f7fbb58f4566d31b72c1970323a68d65cd8fa3258483ecfdb3'
 ALGORITH = 'HS256'
 
+pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
 
 app = FastAPI()
@@ -37,7 +39,7 @@ fake_users_db = {
         "email": "jhondoe@gmail.com",
         "age": 19,
         "disabled": False,
-        "hashed_password": "fakehashedsecret1"
+        "hashed_password": "$2a$12$6hm7P/fHg8Wjg72uewCHau9trXznBf/bc9nsxv5e8m/2GFqdVktGW"
     },
     "alice": {
         "username": "alice",
@@ -45,7 +47,7 @@ fake_users_db = {
         "email": "alice@gmail.com",
         "age": 15,
         "disabled": True,
-        "hashed_password": "fakehashedsecret1"
+        "hashed_password": "$2a$12$6hm7P/fHg8Wjg72uewCHau9trXznBf/bc9nsxv5e8m/2GFqdVktGW"
     }
 }
 
@@ -100,7 +102,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
             detail='Wrong username or password.'
         )
     user = UserInDB(**user_dict)
-    if not user.hashed_password == fake_hash_password(form_data.password):
+    if not pwd_context.verify(form_data.password, user.hashed_password): 
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail='Wrong username or password.'
