@@ -8,6 +8,8 @@ from passlib.context import CryptContext
 import jwt
 from jwt.exceptions import InvalidTokenError
 
+from enum import Enum
+
 TOKEN_EXPIRATION_MINUTES = 1
 SECRET_KEY = '9e599617f42ea3f7fbb58f4566d31b72c1970323a68d65cd8fa3258483ecfdb3'
 ALGORITH = 'HS256'
@@ -29,6 +31,12 @@ class User(BaseModel):
 
 class UserInDB(User):
     hashed_password: str
+
+# predefined values
+class ModelName(str, Enum):
+    alexnet = "alexnet"
+    resnet = "resnet"
+    lenet = "lenet"
 
 # fake users db
 
@@ -125,9 +133,18 @@ def get_me(current_user: User = Depends(get_current_active_user)):
 def read_root():
     return {"Hello": "World"}
 
-@app.get("/name")
-def custom_read():
-    return {"name": "Iden"}
+@app.get("/path_parameter/{item_id}", tags=['parameters'])
+def path_parameter(item_id: int):
+    return {"path_parameter": f"{item_id}"}
+
+@app.get('/path_parameter/predefined/values/{model_name}', tags=['parameters'])
+def predefined_parameter(model_name: ModelName):
+    if model_name is ModelName.alexnet:
+        return {"choose": "alexnet"}
+    elif model_name is ModelName.resnet:
+        return {"choose": "resnet"}
+    else:
+        return {"choose": "lenet"}
 
 @app.get('/ubuntu')
 def ubuntu_road():
