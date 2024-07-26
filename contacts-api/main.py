@@ -135,7 +135,7 @@ def read_root():
 
 @app.get("/path_parameter/{item_id}", tags=['path parameters'])
 def path_parameter(item_id: int):
-    return {"path_parameter": f"{item_id}"}
+    return {"path_parameter": item_id}
 
 @app.get('/path_parameter/predefined/values/{model_name}', tags=['path parameters'])
 def predefined_parameter(model_name: ModelName):
