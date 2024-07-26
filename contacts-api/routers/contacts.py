@@ -17,8 +17,8 @@ contacts_list = [Contact(id=1, name="Guillermo", last_name="Palermo", age=23, ph
                  Contact(id=4, name="Kylian", last_name="Mbappe", age=26, phone_number=77104445),]
 
 @router.get("", response_model=list[Contact])
-def get_contacts():
-    return contacts_list
+def get_contacts(skip: int = 0, limit:int = 10):
+    return contacts_list[skip: skip + limit]
 
 @router.get('/{id}', response_model=Contact)
 def get_specific_contact(id: int):

@@ -133,11 +133,11 @@ def get_me(current_user: User = Depends(get_current_active_user)):
 def read_root():
     return {"Hello": "World"}
 
-@app.get("/path_parameter/{item_id}", tags=['parameters'])
+@app.get("/path_parameter/{item_id}", tags=['path parameters'])
 def path_parameter(item_id: int):
     return {"path_parameter": f"{item_id}"}
 
-@app.get('/path_parameter/predefined/values/{model_name}', tags=['parameters'])
+@app.get('/path_parameter/predefined/values/{model_name}', tags=['path parameters'])
 def predefined_parameter(model_name: ModelName):
     if model_name is ModelName.alexnet:
         return {"choose": "alexnet"}
@@ -145,6 +145,18 @@ def predefined_parameter(model_name: ModelName):
         return {"choose": "resnet"}
     else:
         return {"choose": "lenet"}
+    
+@app.get('/query_parameters/required', tags=['query parameters'], summary='Query parameters required')
+def query_parameters(parameter1: str, parameter2: str):
+    return {"parameter1": parameter1, "parameter2": parameter2}
+
+@app.get('/query_parameters/notrequired/', tags=['query parameters'], summary='Query parameters not required')
+def query_paramteres_not_required(param1: str| None = None, param2: str|None = None):
+    return {"parameter1": param1, "parameter2": param2}
+
+@app.get('/query_parameters/suma/', tags=['query parameters'], summary='Query parameters with default value with integers')
+def query_parameters(a: int = 0, b: int = 0):
+    return {"result": a + b}
 
 @app.get('/ubuntu')
 def ubuntu_road():
