@@ -264,7 +264,7 @@ describe('My test suite', () => {
 
         })
     })
-    it.only("Test for testing not required query parameters", () => {
+    it("Test for testing not required query parameters", () => {
         cy.request({
             method: "GET",
             url: 'http://127.0.0.1:8000/query_parameters/notrequired',
@@ -273,6 +273,30 @@ describe('My test suite', () => {
             const parameter2 = response.body.parameter2
             expect(parameter1).to.be.eq(null)
             expect(parameter2).to.be.eq(null)
+        })
+    })
+    it("Test for testing the path parameter endpoint with valid param data type.", () => {
+        cy.request({
+            method: 'GET',
+            failOnStatusCode: false,
+            url: 'http://127.0.0.1:8000/path_parameter/1'
+        }).then(response => {
+            const data = response.body
+            expect(data.path_parameter).to.be.eq(1)
+        })
+    })
+    it.only("Test for testing the path parameter endpoint with invalid param data type.", () => {
+        cy.request({
+            method: 'GET',
+            failOnStatusCode: false,
+            url: 'http://127.0.0.1:8000/path_parameter/helloworld'
+        }).then(response => {
+            const data = response.body.detail
+            expect(data[0].type).to.be.eq("int_parsing")
+            expect(data[0].msg).to.be.eq("Input should be a valid integer, unable to parse string as an integer")
+            expect(data[0].input).to.be.eq("helloworld")
+            expect(data[0].loc[0]).to.be.eq('path')
+            expect(data[0].loc[1]).to.be.eq('item_id')
         })
     })
 })
