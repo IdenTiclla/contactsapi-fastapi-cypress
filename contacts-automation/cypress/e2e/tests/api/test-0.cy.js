@@ -11,18 +11,6 @@ describe('My test suite', () => {
             expect(data.Hello).to.be.eq('World')
         })
     })
-    it("My second test case.", () => {
-        cy.request({
-            method: 'GET',
-            url: 'http://127.0.0.1:8000/name'
-        }).then(response => {
-            const data = response.body
-            expect(data).to.be.an('object')
-            expect(data).to.have.property('name')
-            expect(data.name).to.be.eq('Iden')
-            expect(data.name).to.be.an('string')
-        })
-    })
     it("My test written on ubuntu.", () => {
         cy.request({
             method: 'GET',
@@ -189,7 +177,7 @@ describe('My test suite', () => {
             })
         })
     })
-    it.only("Test for testing the get me endpoint with active user.", () => {
+    it("Test for testing the get me endpoint with active user.", () => {
         cy.request({
             method: "POST",
             url: "http://127.0.0.1:8000/login",
@@ -203,7 +191,6 @@ describe('My test suite', () => {
             }
         }).then(response => {
             const token = response.body.access_token
-            console.log(token)
             cy.request({
                 method: 'GET',
                 url: 'http://127.0.0.1:8000/users/me',
@@ -211,7 +198,6 @@ describe('My test suite', () => {
                     'Authorization': `Bearer ${token}`
                 }
             }).then(response => {
-                console.log(response)
                 expect(response.status).to.be.eq(200)
                 expect(response.body).to.be.an('object')
                 expect(response.body.username).to.be.eq('jhondoe')
@@ -220,6 +206,44 @@ describe('My test suite', () => {
                 expect(response.body.age).to.be.eq(19)
                 expect(response.body.disabled).to.be.eq(false)
             })
+        })
+    })
+    it ("Test for testing query parameters without providing them", () => {
+        cy.request({
+            method: 'GET',
+            url: 'http://127.0.0.1:8000/contacts'
+        }).then(response => {
+            const data = response.body
+            expect(data).to.have.length(5)
+        })
+    })
+    it('Test for testing query parameters providing them - 1', () => {
+        cy.request({
+            method: 'GET',
+            url: 'http://127.0.0.1:8000/contacts?skip=1&limit=10'
+        }).then(response => {
+            const data = response.body
+            expect(data).to.have.length(4)
+        })
+    })
+
+    it('Test for testing query parameters providing them - 2', () => {
+        cy.request({
+            method: 'GET',
+            url: 'http://127.0.0.1:8000/contacts?skip=2&limit=10'
+        }).then(response => {
+            const data = response.body
+            expect(data).to.have.length(3)
+        })
+    })
+
+    it('Test for testing query parameters providing them - 3', () => {
+        cy.request({
+            method: 'GET',
+            url: 'http://127.0.0.1:8000/contacts?skip=10&limit=10'
+        }).then(response => {
+            const data = response.body
+            expect(data).to.have.length(0)
         })
     })
 })
