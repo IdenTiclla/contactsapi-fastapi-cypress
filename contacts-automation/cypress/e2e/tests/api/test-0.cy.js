@@ -246,7 +246,7 @@ describe('My test suite', () => {
             expect(data).to.have.length(0)
         })
     })
-    it.only("Test for testing required query parameters. - 1", () => {
+    it("Test for testing required query parameters. - 1", () => {
         cy.request({
             method: 'GET',
             url: 'http://127.0.0.1:8000/query_parameters/required',
@@ -262,6 +262,17 @@ describe('My test suite', () => {
             const msgForParam2 = param2.msg
             expect(msgForParam2).to.be.eq('Field required')
 
+        })
+    })
+    it.only("Test for testing not required query parameters", () => {
+        cy.request({
+            method: "GET",
+            url: 'http://127.0.0.1:8000/query_parameters/notrequired',
+        }).then(response => {
+            const parameter1 = response.body.parameter1
+            const parameter2 = response.body.parameter2
+            expect(parameter1).to.be.eq(null)
+            expect(parameter2).to.be.eq(null)
         })
     })
 })
