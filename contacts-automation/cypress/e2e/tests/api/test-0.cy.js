@@ -246,4 +246,22 @@ describe('My test suite', () => {
             expect(data).to.have.length(0)
         })
     })
+    it.only("Test for testing required query parameters. - 1", () => {
+        cy.request({
+            method: 'GET',
+            url: 'http://127.0.0.1:8000/query_parameters/required',
+            failOnStatusCode: false
+        }).then(response => {
+            console.log(response)
+            console.log(response.body)
+            const data = response.body.detail
+            const param1 = data[0]
+            const param2 = data[1]
+            const msgForParam1 = param1.msg
+            expect(msgForParam1).to.be.eq('Field required')
+            const msgForParam2 = param2.msg
+            expect(msgForParam2).to.be.eq('Field required')
+
+        })
+    })
 })
