@@ -158,6 +158,10 @@ def query_paramteres_not_required(param1: str| None = None, param2: str|None = N
 def query_parameters(a: int = 0, b: int = 0):
     return {"result": a + b}
 
+@app.get('/query_parameters/booleans/', tags=['query parameters'])
+def query_parameters_booleans(boolean: bool|None=False):
+    return {"boolean": boolean}
+
 @app.get('/ubuntu')
 def ubuntu_road():
     return {"os": "ubuntu"}
