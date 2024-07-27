@@ -285,7 +285,7 @@ describe('My test suite', () => {
             expect(data.path_parameter).to.be.eq(1)
         })
     })
-    it.only("Test for testing the path parameter endpoint with invalid param data type.", () => {
+    it("Test for testing the path parameter endpoint with invalid param data type.", () => {
         cy.request({
             method: 'GET',
             failOnStatusCode: false,
@@ -297,6 +297,15 @@ describe('My test suite', () => {
             expect(data[0].input).to.be.eq("helloworld")
             expect(data[0].loc[0]).to.be.eq('path')
             expect(data[0].loc[1]).to.be.eq('item_id')
+        })
+    })
+    it.only("Test for testing the bool query parameter.", () => {
+        cy.request({
+            method: 'GET',
+            url: 'http://127.0.0.1:8000/query_parameters/booleans/?boolean=yes'
+        }).then(response => {
+            const data = response.body
+            expect(data.boolean).to.be.eq(true)
         })
     })
 })
