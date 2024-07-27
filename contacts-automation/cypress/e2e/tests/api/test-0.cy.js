@@ -299,13 +299,23 @@ describe('My test suite', () => {
             expect(data[0].loc[1]).to.be.eq('item_id')
         })
     })
-    it.only("Test for testing the bool query parameter.", () => {
+    it("Test for testing the bool query parameter - 1.", () => {
         cy.request({
             method: 'GET',
             url: 'http://127.0.0.1:8000/query_parameters/booleans/?boolean=yes'
         }).then(response => {
             const data = response.body
             expect(data.boolean).to.be.eq(true)
+        })
+    })
+
+    it.only("Test for testing the bool query parameter - 2.", () => {
+        cy.request({
+            method: 'GET',
+            url: 'http://127.0.0.1:8000/query_parameters/booleans/?boolean=no'
+        }).then(response => {
+            const data = response.body
+            expect(data.boolean).to.be.eq(false)
         })
     })
 })
