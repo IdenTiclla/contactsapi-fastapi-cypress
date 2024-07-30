@@ -309,13 +309,33 @@ describe('My test suite', () => {
         })
     })
 
-    it.only("Test for testing the bool query parameter - 2.", () => {
+    it("Test for testing the bool query parameter - 2.", () => {
         cy.request({
             method: 'GET',
             url: 'http://127.0.0.1:8000/query_parameters/booleans/?boolean=no'
         }).then(response => {
             const data = response.body
             expect(data.boolean).to.be.eq(false)
+        })
+    })
+    it.only("Test for testing the path query body parameters.", () => {
+        cy.request({
+            method: 'GET',
+            url: 'http://127.0.0.1:8000/path_query_body_parameters/qwerty?query=zxcv',
+            body: {
+                username: 'asdf',
+                phone: '74879998',
+                email: 'asdf@gmail.com',
+                age: 20,
+                disabled: false
+            }
+        }).then(response => {
+            console.log(response)
+            const data = response.body
+            console.log(data)
+            expect(data.path).to.be.eq('qwerty')
+            expect(data.query).to.be.eq('zxcv')
+            expect(data.user).to.be.an('object')
         })
     })
 })
