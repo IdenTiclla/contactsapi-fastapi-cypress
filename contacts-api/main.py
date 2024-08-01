@@ -162,6 +162,14 @@ def query_parameters(a: int = 0, b: int = 0):
 def query_parameters_booleans(boolean: bool|None=False):
     return {"boolean": boolean}
 
+@app.get('/path_query_body_parameters/{path}')
+def path_query_body_parameters(path: str, user: User, query: str):
+    return {
+        "path": path,
+        "user": user,
+        "query": query
+    }
+
 @app.get('/ubuntu')
 def ubuntu_road():
     return {"os": "ubuntu"}
