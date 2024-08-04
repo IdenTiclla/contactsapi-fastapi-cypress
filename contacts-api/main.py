@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, Query
 from pydantic import BaseModel
 from routers import contacts
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -9,6 +9,8 @@ import jwt
 from jwt.exceptions import InvalidTokenError
 
 from enum import Enum
+
+from typing_extensions import Annotated
 
 TOKEN_EXPIRATION_MINUTES = 1
 SECRET_KEY = '9e599617f42ea3f7fbb58f4566d31b72c1970323a68d65cd8fa3258483ecfdb3'
@@ -169,6 +171,10 @@ def path_query_body_parameters(path: str, user: User, query: str):
         "user": user,
         "query": query
     }
+
+@app.get('/validations', tags=['validations'])
+def validations(q: Annotated[str | None, Query(max_length=50, min_length=3)] = None):
+    return {"q": q}
 
 @app.get('/ubuntu')
 def ubuntu_road():

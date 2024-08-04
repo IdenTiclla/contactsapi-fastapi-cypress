@@ -9,7 +9,7 @@ class Contact(BaseModel):
     name: str
     last_name: str
     age: int
-    phone_number: int
+    phone_number: int | None = None
 
 contacts_list = [Contact(id=1, name="Guillermo", last_name="Palermo", age=23, phone_number=77101245),
                  Contact(id=2, name="Samuel", last_name="Etoo", age=24, phone_number=77101115),
