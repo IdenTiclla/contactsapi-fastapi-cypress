@@ -318,7 +318,7 @@ describe('My test suite', () => {
             expect(data.boolean).to.be.eq(false)
         })
     })
-    it.only("Test for testing the path query body parameters.", () => {
+    it("Test for testing the path query body parameters.", () => {
         cy.request({
             method: 'GET',
             url: 'http://127.0.0.1:8000/path_query_body_parameters/qwerty?query=zxcv',
@@ -336,6 +336,17 @@ describe('My test suite', () => {
             expect(data.path).to.be.eq('qwerty')
             expect(data.query).to.be.eq('zxcv')
             expect(data.user).to.be.an('object')
+        })
+    })
+
+    it.only("Test for testing the string validations.", () => {
+        cy.request({
+            method: 'GET',
+            failOnStatusCode: false,
+            url: 'http://127.0.0.1:8000/validations?q=asdfzxcvzncvvnqwerweqqwerwqewwrqwerqwerwqerasdfzxcvzncvvnqwerweqqwerwqewwrqwerqwerwqer'
+        }).then(response => {
+            expect(response.body.detail[0].type).to.be.eq("string_too_long")
+            expect(response.body.detail[0].msg).to.be.eq("String should have at most 50 characters")
         })
     })
 })
