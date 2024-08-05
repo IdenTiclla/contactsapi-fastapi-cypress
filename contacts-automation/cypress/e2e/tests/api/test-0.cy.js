@@ -339,7 +339,7 @@ describe('My test suite', () => {
         })
     })
 
-    it.only("Test for testing the string validations.", () => {
+    it("Test for testing the string validations.", () => {
         cy.request({
             method: 'GET',
             failOnStatusCode: false,
@@ -350,7 +350,7 @@ describe('My test suite', () => {
         })
     })
 
-    it.only("Test for testing the integer validations.", () => {
+    it("Test for testing the integer query parameter validations.", () => {
         cy.request({
             method: 'GET',
             failOnStatusCode: false,
@@ -359,6 +359,30 @@ describe('My test suite', () => {
             console.log(response)
             expect(response.body.detail[0].type).to.be.eq("greater_than")
             expect(response.body.detail[0].msg).to.be.eq("Input should be greater than 0")
+        })
+    })
+
+    it.only("Test for testing the integer query parameter validations.", () => {
+        cy.request({
+            method: 'GET',
+            failOnStatusCode: false,
+            url: 'http://127.0.0.1:8000/path_parameter/validations/0'
+        }).then(response => {
+            console.log(response)
+            expect(response.body.detail[0].type).to.be.eq("greater_than")
+            expect(response.body.detail[0].msg).to.be.eq("Input should be greater than 0")
+        })
+    })
+
+    it.only("Test for testing the integer query parameter validations.", () => {
+        cy.request({
+            method: 'GET',
+            failOnStatusCode: false,
+            url: 'http://127.0.0.1:8000/path_parameter/validations/11'
+        }).then(response => {
+            console.log(response)
+            expect(response.body.detail[0].type).to.be.eq("less_than_equal")
+            expect(response.body.detail[0].msg).to.be.eq("Input should be less than or equal to 10")
         })
     })
 })
