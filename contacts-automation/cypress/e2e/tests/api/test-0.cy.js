@@ -343,10 +343,22 @@ describe('My test suite', () => {
         cy.request({
             method: 'GET',
             failOnStatusCode: false,
-            url: 'http://127.0.0.1:8000/validations?q=asdfzxcvzncvvnqwerweqqwerwqewwrqwerqwerwqerasdfzxcvzncvvnqwerweqqwerwqewwrqwerqwerwqer'
+            url: 'http://127.0.0.1:8000/validations/string?q=asdfzxcvzncvvnqwerweqqwerwqewwrqwerqwerwqerasdfzxcvzncvvnqwerweqqwerwqewwrqwerqwerwqer'
         }).then(response => {
             expect(response.body.detail[0].type).to.be.eq("string_too_long")
             expect(response.body.detail[0].msg).to.be.eq("String should have at most 50 characters")
+        })
+    })
+
+    it.only("Test for testing the integer validations.", () => {
+        cy.request({
+            method: 'GET',
+            failOnStatusCode: false,
+            url: 'http://127.0.0.1:8000/validations/integer?q=0'
+        }).then(response => {
+            console.log(response)
+            expect(response.body.detail[0].type).to.be.eq("greater_than")
+            expect(response.body.detail[0].msg).to.be.eq("Input should be greater than 0")
         })
     })
 })
