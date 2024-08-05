@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from fastapi import FastAPI, Depends, HTTPException, status, Query
+from fastapi import FastAPI, Depends, HTTPException, status, Query, Path
 from pydantic import BaseModel
 from routers import contacts
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -138,6 +138,10 @@ def read_root():
 @app.get("/path_parameter/{item_id}", tags=['path parameters'])
 def path_parameter(item_id: int):
     return {"path_parameter": item_id}
+
+@app.get('/path_parameter/validations/{item_id}', tags=['path parameters validations'])
+def path_parameter_validation(item_id: Annotated[int, Path(title='any titleeeee here', gt=0, le=10)]):
+    return {"item_id": item_id}
 
 @app.get('/path_parameter/predefined/values/{model_name}', tags=['path parameters'])
 def predefined_parameter(model_name: ModelName):
