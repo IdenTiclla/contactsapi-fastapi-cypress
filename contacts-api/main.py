@@ -172,8 +172,12 @@ def path_query_body_parameters(path: str, user: User, query: str):
         "query": query
     }
 
-@app.get('/validations', tags=['validations'])
+@app.get('/validations/string', tags=['validations'])
 def validations(q: Annotated[str | None, Query(max_length=50, min_length=3)] = None):
+    return {"q": q}
+
+@app.get('/validations/integer', tags=['validations'])
+def int_validations(q: Annotated[int | None, Query(gt=0)] = None):
     return {"q": q}
 
 @app.get('/ubuntu')
