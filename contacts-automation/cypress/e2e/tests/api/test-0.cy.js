@@ -362,7 +362,7 @@ describe('My test suite', () => {
         })
     })
 
-    it.only("Test for testing the integer query parameter validations.", () => {
+    it("Test for testing the integer query parameter validations.", () => {
         cy.request({
             method: 'GET',
             failOnStatusCode: false,
@@ -374,7 +374,7 @@ describe('My test suite', () => {
         })
     })
 
-    it.only("Test for testing the integer query parameter validations.", () => {
+    it("Test for testing the integer query parameter validations.", () => {
         cy.request({
             method: 'GET',
             failOnStatusCode: false,
@@ -383,6 +383,31 @@ describe('My test suite', () => {
             console.log(response)
             expect(response.body.detail[0].type).to.be.eq("less_than_equal")
             expect(response.body.detail[0].msg).to.be.eq("Input should be less than or equal to 10")
+        })
+    })
+
+    it.only("Test for testing the integer body parameter validations. - 1", () => {
+        cy.request({
+            method: "POST",
+            url: 'http://127.0.0.1:8000/contacts/multiple/body/parameters',
+            failOnStatusCode: false,
+            body: {
+                contact: {
+                    id: 7,
+                    name: "some name",
+                    last_name: "some lastname",
+                    age: 15
+                },
+                residence: {
+                    name: "some name",
+                    description: "some description"
+                },
+                importance: 5
+            }
+        }).then(response => {
+            expect(response.status).to.be.eq(422)
+            expect(response.body.detail[0].type).to.be.eq("greater_than_equal")
+            expect(response.body.detail[0].msg).to.be.eq("Input should be greater than or equal to 18")
         })
     })
 })
