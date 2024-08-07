@@ -11,6 +11,10 @@ class Contact(BaseModel):
     age: int
     phone_number: int | None = None
 
+class Residence(BaseModel):
+    name: str
+    description: str
+
 contacts_list = [Contact(id=1, name="Guillermo", last_name="Palermo", age=23, phone_number=77101245),
                  Contact(id=2, name="Samuel", last_name="Etoo", age=24, phone_number=77101115),
                  Contact(id=3, name="Titi", last_name="Henry", age=25, phone_number=77102245),
@@ -65,4 +69,6 @@ def search_contact(id: int):
     except:
         return {"msg": "Contact wasn't found."}
     
-    
+@router.post("/multiple/body/parameters")
+def multiple_body(contact: Contact, residence: Residence):
+    return {"contact": contact, "residence": residence}
