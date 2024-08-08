@@ -343,7 +343,7 @@ describe('My test suite', () => {
         cy.request({
             method: 'GET',
             failOnStatusCode: false,
-            url: 'http://127.0.0.1:8000/validations/string?q=asdfzxcvzncvvnqwerweqqwerwqewwrqwerqwerwqerasdfzxcvzncvvnqwerweqqwerwqewwrqwerqwerwqer'
+            url: 'http://127.0.0.1:8000/query/validations/string?q=asdfzxcvzncvvnqwerweqqwerwqewwrqwerqwerwqerasdfzxcvzncvvnqwerweqqwerwqewwrqwerqwerwqer'
         }).then(response => {
             expect(response.body.detail[0].type).to.be.eq("string_too_long")
             expect(response.body.detail[0].msg).to.be.eq("String should have at most 50 characters")
@@ -354,7 +354,7 @@ describe('My test suite', () => {
         cy.request({
             method: 'GET',
             failOnStatusCode: false,
-            url: 'http://127.0.0.1:8000/validations/integer?q=0'
+            url: 'http://127.0.0.1:8000/query/validations/integer?q=0'
         }).then(response => {
             console.log(response)
             expect(response.body.detail[0].type).to.be.eq("greater_than")
@@ -386,7 +386,7 @@ describe('My test suite', () => {
         })
     })
 
-    it.only("Test for testing the integer body parameter validations. - 1", () => {
+    it("Test for testing the integer body parameter validations. - 1", () => {
         cy.request({
             method: "POST",
             url: 'http://127.0.0.1:8000/contacts/multiple/body/parameters',
