@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Body
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing_extensions import Annotated
 
 router = APIRouter(tags=['Contacts'], prefix='/contacts', responses={404: {"message": 'no encontrado'}})
@@ -8,7 +8,7 @@ class Contact(BaseModel):
     id: int
     name: str
     last_name: str
-    age: Annotated[int | None, Body(ge=18)] = None
+    age: Annotated[int | None, Field(ge=18)] = None
     phone_number: int | None = None
 
 class Image(BaseModel):
@@ -75,5 +75,5 @@ def search_contact(id: int):
         return {"msg": "Contact wasn't found."}
     
 @router.post("/multiple/body/parameters", tags=['body parameters validations'])
-def multiple_body(contact: Contact, residence: Residence, importance: Annotated[int, Body()] ):
+def multiple_body(contact: Contact, residence: Residence, importance: Annotated[int, Body(gt=0)] ):
     return {"contact": contact, "residence": residence, "importance": importance}
