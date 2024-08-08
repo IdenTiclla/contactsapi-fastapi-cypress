@@ -140,8 +140,16 @@ def path_parameter(item_id: int):
     return {"path_parameter": item_id}
 
 @app.get('/path_parameter/validations/{item_id}', tags=['path parameters validations'])
-def path_parameter_validation(item_id: Annotated[int, Path(title='any titleeeee here', gt=0, le=10)]):
+def path_parameter_validation(
+        item_id: Annotated[int, Path(title='any titleeeee here', gt=0, le=10)]
+    ):
     return {"item_id": item_id}
+
+@app.get('/path/validation/string/{parameter}', tags=['path parameters validations'])
+def path_parameter_validation_string(
+        parameter: Annotated[str, Path(title='my title here', max_length=50, min_length=3)]
+    ):
+    return {"parameter": parameter}
 
 @app.get('/path_parameter/predefined/values/{model_name}', tags=['path parameters'])
 def predefined_parameter(model_name: ModelName):
@@ -176,12 +184,12 @@ def path_query_body_parameters(path: str, user: User, query: str):
         "query": query
     }
 
-@app.get('/validations/string', tags=['validations'])
-def validations(q: Annotated[str | None, Query(max_length=50, min_length=3)] = None):
+@app.get('/query/validations/string', tags=['query parameters validations'])
+def validations(q: Annotated[str | None, Query(max_length=50, min_length=3)]):
     return {"q": q}
 
-@app.get('/validations/integer', tags=['validations'])
-def int_validations(q: Annotated[int | None, Query(gt=0)] = None):
+@app.get('/query/validations/integer', tags=['query parameters validations'])
+def int_validations(q: Annotated[int | None, Query(gt=0)]):
     return {"q": q}
 
 @app.get('/ubuntu')

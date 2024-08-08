@@ -11,9 +11,14 @@ class Contact(BaseModel):
     age: Annotated[int | None, Body(ge=18)] = None
     phone_number: int | None = None
 
+class Image(BaseModel):
+    name: str
+    url: str
+
 class Residence(BaseModel):
     name: str
     description: str
+    image: Image | None = None
 
 contacts_list = [Contact(id=1, name="Guillermo", last_name="Palermo", age=23, phone_number=77101245),
                  Contact(id=2, name="Samuel", last_name="Etoo", age=24, phone_number=77101115),
@@ -69,6 +74,6 @@ def search_contact(id: int):
     except:
         return {"msg": "Contact wasn't found."}
     
-@router.post("/multiple/body/parameters")
+@router.post("/multiple/body/parameters", tags=['body parameters validations'])
 def multiple_body(contact: Contact, residence: Residence, importance: Annotated[int, Body()] ):
     return {"contact": contact, "residence": residence, "importance": importance}
