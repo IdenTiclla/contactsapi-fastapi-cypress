@@ -6,7 +6,7 @@ router = APIRouter(tags=['Contacts'], prefix='/contacts', responses={404: {"mess
 
 class Contact(BaseModel):
     id: int
-    name: str
+    name: Annotated[str | None, Field(max_length=15)] = None
     last_name: str
     age: Annotated[int | None, Field(ge=18)] = None
     phone_number: int | None = None
