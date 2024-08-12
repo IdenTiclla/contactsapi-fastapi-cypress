@@ -111,7 +111,7 @@ describe('My test suite', () => {
         })
     })
 
-    it.only("test for testing the name validation.", () => {
+    it("test for testing the name validation.", () => {
         cy.request({
             method: "POST",
             url: 'http:/127.0.0.1:8000/contacts',
@@ -425,6 +425,49 @@ describe('My test suite', () => {
             expect(response.status).to.be.eq(422)
             expect(response.body.detail[0].type).to.be.eq("greater_than_equal")
             expect(response.body.detail[0].msg).to.be.eq("Input should be greater than or equal to 18")
+        })
+    })
+
+    it.only("Test for testing embed behavior.", () => {
+        cy.request({
+            method: "POST",
+            url: 'http://127.0.0.1:8000/contacts/residences/embed',
+            failOnStatusCode: false,
+            body: {
+                residence: {
+                    name: "some name",
+                    description: "my description",
+                    image: {
+                        name: "imagerandomname",
+                        url: "dummy url"
+                    },
+                    rooms: ["string1", "string2"]
+                }
+            }
+        }).then(response => {
+            expect(response.status).to.be.eq(200)
+            expect(response.body).to.have.property('residence')
+        })
+    })
+
+    it.only("Test for testing not embed behavior.", () => {
+        cy.request({
+            method: "POST",
+            url: 'http://127.0.0.1:8000/contacts/residences/not/embed',
+            failOnStatusCode: false,
+            body: {
+                name: "some name",
+                description: "my description",
+                image: {
+                    name: "imagerandomname",
+                    url: "dummy url"
+                },
+                rooms: ["string1", "string2"]
+            }
+        }).then(response => {
+            console.log(response)
+            expect(response.status).to.be.eq(200)
+            expect(response.body).to.have.property('residence')
         })
     })
 })
