@@ -79,7 +79,10 @@ def search_contact(id: int):
 def multiple_body(contact: Contact, residence: Residence, importance: Annotated[int, Body(gt=0)] ):
     return {"contact": contact, "residence": residence, "importance": importance}
 
-@router.post('/residences', tags=['nested models'])
-def create_residence(residence: Residence):
-    print(residence)
+@router.post('/residences/embed', tags=['nested models'])
+def create_residence(residence: Annotated[Residence, Body(embed=True)]):
+    return {"residence": residence}
+
+@router.post('/residences/not/embed', tags=['nested models'])
+def create_residence(residence: Annotated[Residence, None]):
     return {"residence": residence}
