@@ -110,6 +110,23 @@ describe('My test suite', () => {
             expect(data.phone_number).to.be.eq(77478489) 
         })
     })
+
+    it.only("test for testing the name validation.", () => {
+        cy.request({
+            method: "POST",
+            url: 'http:/127.0.0.1:8000/contacts',
+            failOnStatusCode: false,
+            body: {
+                id: 6,
+                name: 'mynamerandomstring',
+                last_name: 'mylastname'
+            }
+        }).then(response => {
+            console.log(response.body.detail[0])
+            expect(response.body.detail[0].msg).to.be.eq("String should have at most 15 characters")
+            expect(response.body.detail[0].type).to.be.eq("string_too_long")    
+        })
+    })
     it("Testing the login functionality - expecting 400 status.", () => {
         cy.request({
             method: 'POST',
