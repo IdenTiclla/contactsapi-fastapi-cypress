@@ -21,6 +21,11 @@ class Residence(BaseModel):
     image: Image | None = None
     rooms: list[str] = []
 
+class House(BaseModel):
+    name: str
+    description: str
+    images: list[Image]
+
 contacts_list = [Contact(id=1, name="Guillermo", last_name="Palermo", age=23, phone_number=77101245),
                  Contact(id=2, name="Samuel", last_name="Etoo", age=24, phone_number=77101115),
                  Contact(id=3, name="Titi", last_name="Henry", age=25, phone_number=77102245),
@@ -86,3 +91,15 @@ def create_residence(residence: Annotated[Residence, Body(embed=True)]):
 @router.post('/residences/not/embed', tags=['nested models'])
 def create_residence(residence: Annotated[Residence, None]):
     return {"residence": residence}
+
+@router.post('/houses', tags=['list of submodels'])
+def create_house(house: Annotated[House, None]):
+    for image in house.images:
+        print(image)
+    return {"house": house}
+
+@router.post('/images', tags=['practicing list'])
+def sending_images(images: list[Image]):
+    for image in images:
+        print(image)
+    return {"images": images}
