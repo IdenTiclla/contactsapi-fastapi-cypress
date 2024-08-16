@@ -428,7 +428,7 @@ describe('My test suite', () => {
         })
     })
 
-    it.only("Test for testing embed behavior.", () => {
+    it("Test for testing embed behavior.", () => {
         cy.request({
             method: "POST",
             url: 'http://127.0.0.1:8000/contacts/residences/embed',
@@ -450,7 +450,7 @@ describe('My test suite', () => {
         })
     })
 
-    it.only("Test for testing not embed behavior.", () => {
+    it("Test for testing not embed behavior.", () => {
         cy.request({
             method: "POST",
             url: 'http://127.0.0.1:8000/contacts/residences/not/embed',
@@ -468,6 +468,30 @@ describe('My test suite', () => {
             console.log(response)
             expect(response.status).to.be.eq(200)
             expect(response.body).to.have.property('residence')
+        })
+    })
+    it.only("Testing sending the a list of images.", () => {
+        cy.request({
+            method: 'POST',
+            url: 'http://127.0.0.1:8000/contacts/images',
+            failOnStatusCode: false,
+            body: [
+                {
+                    name: "some name1",
+                    url: 'some url'
+                },
+                {
+                    name: "some name2",
+                    url: 'some url2'
+                },
+                {
+                    name: "some name3",
+                    url: 'some url3'
+                }
+            ]
+        }).then(response => {
+            console.log(response)
+            expect(response.body.images).to.have.length(3)
         })
     })
 })
